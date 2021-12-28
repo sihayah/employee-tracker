@@ -38,3 +38,62 @@ start = () => {
         }
     });
 };
+
+updateEmployee = () => {
+    inquirer.prompt (
+        {
+            type: 'confirm',
+            name: 'confirmFirstName',
+            message: "Would you like to update this employee's first name?",
+            default: true
+        },
+        {
+            type: 'string',
+            name: 'firstName',
+            message: "Employee's first name:",
+            when: ({confirmFirstName}) => {
+                if (confirmFirstName) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        },
+        {
+            type: 'confirm',
+            name: 'confirmLastName',
+            message: "Would you like to update this employee's last name?",
+            default: true
+        },
+        {
+            type: 'string',
+            name: 'lastName',
+            message: "Employee's last name:",
+            when: ({confirmLastName}) => {
+                if (confirmLastName) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        },
+        {
+            type: 'confirm',
+            name: 'confirmJobTitle',
+            message: "Would you like to update this employee's job title?",
+            default: true
+        },
+        {
+            type: 'string',
+            name: 'jobTitle',
+            message: "Employee's job title:",
+            when: ({confirmJobTitle}) => {
+                if (confirmJobTitle) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        }
+    );
+};
