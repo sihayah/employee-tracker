@@ -1,5 +1,4 @@
 const inquirer = require('inquirer');
-const inquire = require('inquirer');
 
 start = () => {
     inquirer.prompt (

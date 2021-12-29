@@ -1,2 +1,2 @@
-CREATE DATABASE employee-tracker;
-USE employee-tracker;
+CREATE DATABASE employee_tracker;
+USE employee_tracker;`
