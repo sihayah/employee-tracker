@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
 const db = require('./db/connection');
-const { viewDepts } = require('./lib/view-tables');
+const { viewDepts, viewRoles } = require('./lib/view-tables');
 const inquirer = require('inquirer');
 
 start = () => {
@@ -17,7 +17,13 @@ start = () => {
         if(action === 'View All Departments') {
             console.log('DEPARTMENTS...');
             return viewDepts();
-        } else {
+        } else if(action === 'View All Roles') {
+            console.log('ROLES...');
+            return viewRoles();
+        } else if (action === 'View All Employees') {
+            console.log('EMPLOYEES')
+            return viewEmployees();
+        }else {
             start();
         }
     });
