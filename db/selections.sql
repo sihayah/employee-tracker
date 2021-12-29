@@ -1,3 +1,5 @@
+SELECT*FROM departments;
+
 SELECT roles.id, job_title, salary, dept_name
 FROM roles
     JOIN departments
