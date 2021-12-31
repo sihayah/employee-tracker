@@ -28,10 +28,15 @@ handleAction = (answer) => {
         case "Update an Employee's Role":
             updateEmployeeRole();
             break;
+        case "Exit":
+            console.log("Bye");
+            db.end();
+        default: 
+            restart();
     };
 };
 
-startAgain = (response) => {
+restart = () => {
     inquirer.prompt (
         {
             type:'confirm',
@@ -41,19 +46,21 @@ startAgain = (response) => {
     )
 };
 
-start= () => {
-    inquirer.prompt (
+menu= async() => {
+    await inquirer.prompt (
         {
             type: 'list',
             name: 'action',
             message: 'OPTIONS: ',
             choices: [
-                'View All Departments', 'View All Roles', 'View All Employees', 'Add Department', 'Add Role', 'Add an Employee', "Update an Employee's Role"
+                'View All Departments', 'View All Roles', 'View All Employees', 'Add Department', 'Add Role', 'Add an Employee', "Update an Employee's Role", "Exit"
             ]
     })
-    .then(async answer => {
-        await handleAction(answer);
+    .then(answer => {
+        handleAction(answer);
     })
 };
 
-start();
+menu();
+
+module.exports = restart;
