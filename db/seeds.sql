@@ -10,4 +10,3 @@ VALUES ('Guillermo', 'Rodriguez', 3, 5), ('Sofi', 'West', 3, 6),('Ha-yoon', 'Par
 INSERT INTO employees (first_name, last_name, department_id, role_id, manager_id)
 VALUES ('Millie', 'Moss', 1, 1, 1), ('Xena', 'Patel', 1, 1, 1), ('Yoshi', 'Ito', 1, 2, 1),('Yuki', 'Nakamura', 1, 2, 2), ('Bernice', 'Olivier', 2, 3, 2), ('Margarita', 'Gonzalez', 2, 3, 2), ('Issa', 'Ahmed', 2, 4, 3), ('Fatima', 'Baquri', 2, 4, 3), ('Ali', 'Arain', 2, 4, 4), ('Prisha', 'Das', 2, 4, 4);
 
-SELECT * FROM employees;

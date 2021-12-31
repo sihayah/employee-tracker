@@ -1,8 +1,71 @@
+const db = require('./db/connection');
 const inquirer = require('inquirer');
-const db = require('../db/connection');
-const restartMenu = require('../server');
 
-// get inquirer's needed data from sql...
+
+startMenu = async() => {
+await inquirer.prompt (
+    {
+        type: 'list',
+        name: 'action',
+        message: 'OPTIONS: ',
+        choices: [
+            'View All Departments', 'View All Roles', 'View All Employees', 'Add Department', 'Add Role', 'Add an Employee', "Update an Employee's Role", "Exit"
+        ]
+})
+.then(answer => {
+    handleAction(answer);
+});
+}
+
+
+handleAction = (answer) => {
+    const action = answer.action
+    switch(action) {
+        case 'View All Departments':
+            viewDepts();
+            break;
+        case 'View All Roles':
+            viewRoles();
+            break;
+        case 'View All Employees':
+            viewEmployees();
+            break;
+        case 'Add Department':
+            createDept();
+            break;
+        case 'Add Role':
+            createRole();
+            break;
+        case 'Add an Employee':
+            createEmployee();
+            break;
+        case "Update an Employee's Role":
+            updateEmployeeRole();
+            break;
+        case "Exit":
+            db.end();
+    };
+};
+
+restartMenu = () => {
+    inquirer.prompt (
+        {
+            type:'confirm',
+            name: 'restart',
+            message: 'Would you like to make another selection?'
+        }
+    )
+        .then(answer => {
+            switch(answer.restart) {
+                case true:
+                    startMenu();
+                    break;
+                case false:
+                    db.end();
+                    break;
+            };
+        });
+};
 
 returnDeptsArr = () => {
     return new Promise((res) => {
@@ -177,6 +240,7 @@ createEmployee = async() => {
                     VALUES ('${lastName}', '${firstName}', '${roleId}', '${deptId}', '${managerId}')`, 
                 function (err, result) {
             if (err) throw err; 
+            console.log('')
             console.log(' ...................................................................................................'),
             console.log(`    '${firstName} ${lastName}' has been added to EMPLOYEES`),
             console.log(' ...................................................................................................');
@@ -298,12 +362,65 @@ updateEmployeeRole = async() => {
                 function (err, result) {
                     if (err) throw err; 
             })
+            restartMenu();
     })
     };
 
-module.exports = { 
-                    createDept, 
-                    createRole,
-                    createEmployee,
-                    updateEmployeeRole
-                };
+    viewDepts = () => {
+        db.connect(function(err) {
+            if (err) throw err;
+            db.query(`
+                        SELECT*FROM departments
+                        ORDER BY 1;`, function (err, result, fields) {
+            if (err) throw err;
+            console.table(result);
+            restartMenu();
+            });
+        })
+    };
+    
+    viewRoles = () => {
+        db.connect(function(err) {
+            if (err) throw err;
+            db.query(`
+            SELECT roles.id, job_title, salary, dept_name
+            FROM roles
+                JOIN departments
+                ON roles.department_id = departments.id
+            ORDER BY 2;`, 
+                function (err, result, fields) {
+            if (err) throw err;
+            console.table(result);
+            restartMenu();
+            });
+        })
+    };
+    
+    viewEmployees = () => {
+        db.connect(function(err) {
+            if (err) throw err;
+            db.query(`
+            SELECT employees.id, employees.last_name, employees.first_name, job_title, dept_name, salary, managers.last_name AS manager
+            FROM employees
+            JOIN roles
+                ON employees.role_id = roles.id
+            JOIN departments
+                ON roles.department_id = departments.id
+            JOIN managers
+                ON employees.manager_id = managers.id
+            UNION SELECT managers.id, last_name, first_name, job_title,  salary, dept_name, NULL AS manager 
+            FROM managers
+            JOIN roles
+                ON managers.management_role_id = roles.id
+            JOIN departments
+                ON roles.department_id = departments.id
+            ORDER BY 2`, 
+                function (err, result, fields) {
+            if (err) throw err; 
+            console.table(result);
+            restartMenu();
+            });
+        });
+    };
+
+startMenu();
