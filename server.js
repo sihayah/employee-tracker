@@ -1,33 +1,60 @@
 const mysql = require('mysql2');
 const db = require('./db/connection');
-const { viewDepts, viewRoles } = require('./lib/view-tables');
+const { viewDepts, viewRoles, viewEmployees } = require('./lib/view-tables');
+const { createDept, createRole, createEmployee } = require('./lib/create');
 const inquirer = require('inquirer');
 
-start = () => {
+handleAction = (answer) => {
+    const action = answer.action
+    switch(action) {
+        case 'View All Departments':
+            viewDepts();
+            break;
+        case 'View All Roles':
+            viewRoles();
+            break;
+        case 'View All Employees':
+            viewEmployees();
+            break;
+        case 'Add Department':
+            createDept();
+            break;
+        case 'Add Role':
+            createRole();
+            break;
+        case 'Add an Employee':
+            createEmployee();
+            break;
+        // case "Update An Employee's Role":
+        //     res = updateEpmployee();
+        //     break;
+    };
+};
+
+// startAgain = (response) => {
+//     inquirer.prompt (
+//         {
+//             type:'confirm',
+//             name: 'restart',
+//             message: 'Would you like to make another selection?'
+//         }
+//     )
+// };
+
+function start() {
     inquirer.prompt (
         {
             type: 'list',
             name: 'action',
-            message: 'What would you like to do?',
+            message: 'OPTIONS: ',
             choices: [
-                'View All Departments', 'View All Roles', 'View All Employees', 'Add Department', 'Add Role', 'Add an Employee', 'Update an Employee'
+                'View All Departments', 'View All Roles', 'View All Employees', 'Add Department', 'Add Role', 'Add an Employee', "Update an Employee's Role"
             ]
     })
-    .then(({action}) => {
-        if(action === 'View All Departments') {
-            console.log('DEPARTMENTS...');
-            return viewDepts();
-        } else if(action === 'View All Roles') {
-            console.log('ROLES...');
-            return viewRoles();
-        } else if (action === 'View All Employees') {
-            console.log('EMPLOYEES')
-            return viewEmployees();
-        }else {
-            start();
-        }
-    });
+    .then(answer => {
+        handleAction(answer)
+    })
 };
 
-start();
 
+createEmployee();
