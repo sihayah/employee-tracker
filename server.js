@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
 const db = require('./db/connection');
 const { viewDepts, viewRoles, viewEmployees } = require('./lib/view-tables');
-const { createDept, createRole, createEmployee } = require('./lib/create');
+const { createDept, createRole, createEmployee, updateEmployeeRole} = require('./lib/create');
 const inquirer = require('inquirer');
 
 handleAction = (answer) => {
@@ -25,23 +25,23 @@ handleAction = (answer) => {
         case 'Add an Employee':
             createEmployee();
             break;
-        // case "Update An Employee's Role":
-        //     res = updateEpmployee();
-        //     break;
+        case "Update an Employee's Role":
+            updateEmployeeRole();
+            break;
     };
 };
 
-// startAgain = (response) => {
-//     inquirer.prompt (
-//         {
-//             type:'confirm',
-//             name: 'restart',
-//             message: 'Would you like to make another selection?'
-//         }
-//     )
-// };
+startAgain = (response) => {
+    inquirer.prompt (
+        {
+            type:'confirm',
+            name: 'restart',
+            message: 'Would you like to make another selection?'
+        }
+    )
+};
 
-function start() {
+start= () => {
     inquirer.prompt (
         {
             type: 'list',
@@ -51,10 +51,9 @@ function start() {
                 'View All Departments', 'View All Roles', 'View All Employees', 'Add Department', 'Add Role', 'Add an Employee', "Update an Employee's Role"
             ]
     })
-    .then(answer => {
-        handleAction(answer)
+    .then(async answer => {
+        await handleAction(answer);
     })
 };
 
-
-createEmployee();
+start();

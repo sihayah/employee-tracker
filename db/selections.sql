@@ -11,3 +11,16 @@ FROM employees
     ON employees.role_id = roles.id
     JOIN departments
     ON roles.department_id = departments.id;
+
+UPDATE employees
+SET role_id = 3
+WHERE employees.id = 5;
+
+SELECT roles.id
+FROM roles
+WHERE job_title = 'Department Head';
+
+SELECT id, last_name, first_name
+FROM employees;
+
+SELECT * FROM roles;
